@@ -1,17 +1,15 @@
-import ImgConteiner from "../componets/ImgConteiner";
-import { useGlobalContext } from "../hook/useGlobalContext"; // 🔹 Ismni katta-kichik harflariga e'tibor bering
-
+import React from 'react'
+import { useContext } from 'react'
+import { GlobolContext } from '../contex/GlobolContext'
 function LikkedImages() {
-    const {likkedImages} = useGlobalContext();
+    const data = useContext(GlobolContext)
+    console.log(data);
     
-        if(likkedImages.length ==0){
-            return <h1>You don't choose andy images yet!</h1>
-        }
-    return (
-        <div className="align-elemets">
-            {likkedImages.length >0 && <ImgConteiner images={likkedImages} />}
-        </div>
-    );
+  return (
+    <div>
+      
+    </div>
+  )
 }
 
-export default LikkedImages;
+export default LikkedImages
