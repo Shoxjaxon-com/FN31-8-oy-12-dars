@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { FcStackOfPhotos } from "react-icons/fc";
 import { Link } from "react-router-dom";
-import { FaHeart } from "react-icons/fa";
-
+import { FaDownload, FaHeart } from "react-icons/fa";
+import { useGlobalContext } from "../hook/useGlobalContext";
 const themeFromLocalStorage = () => {
   return localStorage.getItem("theme") || "winter";
 };
 
 function Navbar() {
+  const { likedImages, downloadedImages, user } = useGlobalContext();
   const [theme, setTheme] = useState(themeFromLocalStorage());
 
   const toggleTheme = () => {
@@ -55,17 +56,30 @@ function Navbar() {
         </div>
 
         <div className="navbar-end flex gap-7 items-center">
+          <Link to="/dowloadImg">
+            <div className="indicator">
+              <span className="indicator-item badge badge-sm badge-secondary">
+                {downloadedImages}
+              </span>
+              <FaDownload className="h-8 w-8" />
+            </div>
+          </Link>
+
           <Link to="/likedImages">
             <div className="indicator">
               <span className="indicator-item badge badge-sm badge-secondary">
-                0
+                {likedImages.length}
               </span>
               <FaHeart className="h-8 w-8" />
             </div>
           </Link>
 
           <label className="swap swap-rotate">
-            <input type="checkbox" onChange={toggleTheme} checked={theme === "dracula"} />
+            <input
+              type="checkbox"
+              onChange={toggleTheme}
+              checked={theme === "dracula"}
+            />
 
             <svg
               className="swap-on h-10 w-10 fill-current"
@@ -83,6 +97,38 @@ function Navbar() {
               <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
             </svg>
           </label>
+
+          <div className="dropdown dropdown-end">
+          {/* {user.displayName.split(" ")[0]} */}
+      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+        <div className="w-10 rounded-full ">
+        {user && user.photoURL ? (
+        <img src={user.photoURL} alt={(user.displayName || "User") + " avatar"} />
+      ) : (
+        <img src="/default-avatar.png" alt="Default avatar" />
+      )}        </div>
+      </div>
+      <ul
+        tabIndex={0}
+        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+        <li>
+          <a className="justify-between">
+            Profile
+            <span className="badge">New</span>
+          </a>
+        </li>
+        <li><a>Settings</a></li>
+        <li><a>Logout</a></li>
+      </ul>
+    </div>
+
+          <div className="flex items-center gap-3">
+            {/* <p>Hello {user.displayName.split(" ")[0]}</p> */}
+            {/* <div className="avatar">
+              <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2">
+              </div>
+            </div> */}
+          </div>
         </div>
       </div>
     </header>

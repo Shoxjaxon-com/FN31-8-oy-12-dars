@@ -2,9 +2,13 @@ import { createBrowserRouter } from 'react-router-dom';
 import Home, { action as HomeAction } from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import MainLeyauts from './Leyauts/MainLeyauts';
 import ErrorPage from './pages/ErrorPage';
 import LikkedImages from './pages/LikkedImages';
+import DowloadImg from './pages/DowloadImg';
+import ImgInfo from './pages/ImgInfo';
 
 const router = createBrowserRouter([
   {
@@ -17,7 +21,7 @@ const router = createBrowserRouter([
     action: HomeAction, 
   },
   {
-    path: 'about',
+    path: '/about',
     element: (
       <div className="container mx-auto mt-5">
         <MainLeyauts><About /></MainLeyauts>
@@ -25,10 +29,26 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: 'contact',
+    path: '/contact',
     element: (
       <div className="container mx-auto mt-5">
         <MainLeyauts><Contact /></MainLeyauts>
+      </div>
+    ),
+  },
+  {
+    path: '/login',
+    element: (
+      <div className="container mx-auto mt-5">
+        <Login />
+      </div>
+    ),
+  },
+  {
+    path: '/register',
+    element: (
+      <div className="container mx-auto mt-5">
+        <Register />
       </div>
     ),
   },
@@ -37,6 +57,22 @@ const router = createBrowserRouter([
     element: (
       <div className="container mx-auto mt-5">
         <MainLeyauts><ErrorPage /></MainLeyauts>
+      </div>
+    ),
+  },
+  {
+    path: '/dowloadImg',
+    element: (
+      <div className="container mx-auto mt-5">
+        <MainLeyauts><DowloadImg /></MainLeyauts>
+      </div>
+    ),
+  },
+  {
+    path: '/ImgInfo/:id',
+    element: (
+      <div className="container mx-auto mt-5">
+        <MainLeyauts><ImgInfo /></MainLeyauts>
       </div>
     ),
   },

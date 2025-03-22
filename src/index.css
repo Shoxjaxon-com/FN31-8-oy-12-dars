@@ -7,3 +7,15 @@
         @apply max-w-[2600px] mx-auto px-5;
     }
 }
+/* html,
+body,
+ #root{
+    @apply  h-full;
+ }
+
+ #root{
+    @apply  flex flex-col;
+ }
+ div {
+    @apply  grow
+ } */

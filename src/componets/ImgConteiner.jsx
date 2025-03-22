@@ -1,8 +1,11 @@
 import React from 'react';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import Img from './Img';
+import LikkedImages from '../pages/LikkedImages';
+import { useGlobalContext } from '../hook/useGlobalContext';
 
 function ImgConteiner({ images }) {
+  const {likedImages}= useGlobalContext()
   return (
     <div className="flex justify-center items-center min-h-1/2 w-screen container">
       <div className="max-w-screen-2xl w-full mx-auto px-5">
@@ -18,6 +21,7 @@ function ImgConteiner({ images }) {
                 key={key}
                 src={img.urls.regular}
                 image={img}
+                added={likedImages.some((img)=>img.id == img.id)}
               />
             ))}
           </Masonry>
