@@ -1,65 +1,114 @@
 import React, { useState } from 'react';
-import { Form, Link, useNavigate } from 'react-router-dom';
-import FormInput from '../componets/FormInput';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { FcGoogle } from 'react-icons/fc';
+import { useRegister } from '../hook/useRegister';
+import { login } from '../store/authSlice';
 
 function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { registerWithGoogle } = useRegister();
+
+  // Input state-lari
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [forgotEmail, setForgotEmail] = useState('');
 
+  // ✅ Login funksiyasi
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const storedUser = localStorage.getItem('user');
-    if (!storedUser) {
-      setError('Bunday foydalanuvchi mavjud emas!');
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(user => user.email === email && user.password === password);
+
+    if (!user) {
+      setError("Email yoki parol noto‘g‘ri!");
       return;
     }
 
-    const userData = JSON.parse(storedUser);
-    if (userData.email !== email || userData.password !== password) {
-      setError('Email yoki parol noto‘g‘ri!');
+    dispatch(login("fake-token")); // Redux orqali login qilish
+    localStorage.setItem("userToken", "fake-token"); // Tokenni saqlash
+    setError('');
+    navigate('/'); // Home sahifaga yo‘naltirish
+  };
+
+  // ✅ Parolni unutgan bo‘lsa
+  const handleForgotPassword = () => {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(user => user.email === forgotEmail);
+
+    if (!user) {
+      alert("Bu email tizimda mavjud emas!");
       return;
     }
 
-    // Login muvaffaqiyatli bo‘lsa, foydalanuvchini Home sahifasiga yuboramiz
-    navigate('/home');
+    alert(`Sizning parolingiz: ${user.password}`);
   };
 
   return (
     <div className="flex min-h-screen w-full flex-col md:flex-row">
+      {/* ✅ Chap tarafdagi rasm */}
       <div className="hidden md:w-[40%] bg-[url('https://picsum.photos/seed/picsum/600/800')] bg-cover bg-center md:block"></div>
 
-      <div className="flex w-full items-center justify-center bg-[url('https://picsum.photos/seed/picsum/600/800')] bg-cover bg-center md:w-[60%] md:bg-none rounded-md">
-        <Form method="post" className="w-full max-w-md" onSubmit={handleSubmit}>
-          <h1 className="text-2xl md:text-4xl font-bold mb-5 text-center">
-            Login Page
-          </h1>
-
+      {/* ✅ Login form */}
+      <div className="flex w-full items-center justify-center md:w-[60%] md:bg-none rounded-md">
+        <form className="w-full max-w-md" onSubmit={handleSubmit}>
+          <h1 className="text-2xl md:text-4xl font-bold mb-5 text-center">Login Page</h1>
           {error && <p className="text-red-500 text-center">{error}</p>}
-
+          
+          {/* ✅ Inputlar */}
           <div className="flex flex-col gap-4">
-            <FormInput placeholder="Email" name="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <FormInput placeholder="Password" name="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input input-bordered"
+              required
+            />
+            <input
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input input-bordered"
+              required
+            />
           </div>
 
           <div className="my-5 flex flex-col gap-3 md:my-10 md:flex-row md:gap-5">
             <button type="submit" className="grow btn btn-primary btn-sm md:btn-md">
               Login
             </button>
-            <button type="button" className="grow btn btn-secondary btn-sm md:btn-md flex items-center gap-2 justify-center">
+            <button
+              onClick={registerWithGoogle}
+              type="button"
+              className="grow btn btn-secondary btn-sm md:btn-md flex items-center gap-2 justify-center"
+            >
               <FcGoogle className="w-6 h-6" />
               <span>Google</span>
             </button>
           </div>
 
           <div className="flex justify-between">
-            <p className="link-primary">Forget password?</p>
-            <Link to="/register" className="link-primary">You don't have an account yet?</Link>
+            <button
+              type="button"
+              className="link-primary"
+              onClick={() => {
+                const email = prompt("Emailingizni kiriting:");
+                setForgotEmail(email);
+                handleForgotPassword();
+              }}
+            >
+              Forget password?
+            </button>
+            <Link to="/register" className="link-primary">
+              You don't have an account yet?
+            </Link>
           </div>
-        </Form>
+        </form>
       </div>
     </div>
   );

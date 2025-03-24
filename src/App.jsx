@@ -1,87 +1,84 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Home, { action as HomeAction } from './pages/Home';
+import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MainLeyauts from './Leyauts/MainLeyauts';
 import ErrorPage from './pages/ErrorPage';
-import LikkedImages from './pages/LikkedImages';
+import LikedImages from './pages/LikkedImages';
 import DowloadImg from './pages/DowloadImg';
 import ImgInfo from './pages/ImgInfo';
+import ProtectedRoute from './componets/ProtectedRoute';
+import Navbar from './componets/Navbar';
+
+const withContainer = (Component) => (
+  <MainLeyauts>
+    <div className="container mx-auto">
+      <Component />
+    </div>
+  </MainLeyauts>
+);
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <div className="container mx-auto mt-5">
-        <MainLeyauts><Home /></MainLeyauts>
-      </div>
+      <ProtectedRoute>
+        {withContainer(Home)}
+      </ProtectedRoute>
     ),
-    action: HomeAction, 
   },
   {
     path: '/about',
     element: (
-      <div className="container mx-auto mt-5">
-        <MainLeyauts><About /></MainLeyauts>
-      </div>
+      <ProtectedRoute>
+        {withContainer(About)}
+      </ProtectedRoute>
     ),
   },
   {
     path: '/contact',
     element: (
-      <div className="container mx-auto mt-5">
-        <MainLeyauts><Contact /></MainLeyauts>
-      </div>
+      <ProtectedRoute>
+        {withContainer(Contact)}
+      </ProtectedRoute>
     ),
   },
   {
     path: '/login',
-    element: (
-      <div className="container mx-auto mt-5">
-        <Login />
-      </div>
-    ),
+    element: <Login />,
   },
   {
     path: '/register',
-    element: (
-      <div className="container mx-auto mt-5">
-        <Register />
-      </div>
-    ),
+    element: <Register />,
   },
   {
     path: '*',
-    element: (
-      <div className="container mx-auto mt-5">
-        <MainLeyauts><ErrorPage /></MainLeyauts>
-      </div>
-    ),
+    element: <ErrorPage />,
   },
   {
     path: '/dowloadImg',
     element: (
-      <div className="container mx-auto mt-5">
-        <MainLeyauts><DowloadImg /></MainLeyauts>
-      </div>
+      <ProtectedRoute>
+        {withContainer(DowloadImg)}
+      </ProtectedRoute>
     ),
   },
   {
     path: '/ImgInfo/:id',
     element: (
-      <div className="container mx-auto mt-5">
-        <MainLeyauts><ImgInfo /></MainLeyauts>
-      </div>
+      <ProtectedRoute>
+        {withContainer(ImgInfo)}
+      </ProtectedRoute>
     ),
   },
   {
     path: '/likedImages',
     element: (
-      <div className="container mx-auto mt-5">
-        <MainLeyauts><LikkedImages /></MainLeyauts>
-      </div>
+      <ProtectedRoute>
+        {withContainer(LikedImages)}
+      </ProtectedRoute>
     ),
   },
 ]);

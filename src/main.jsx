@@ -6,11 +6,13 @@ import './index.css'
 import {  GlobalContextProvider } from './contex/GlobolContext'
 import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
+import { Provider } from 'react-redux'
+import store from './store/store'
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <Provider store={store}>
     <GlobalContextProvider>
     <RouterProvider router={router} />
     <ToastContainer position='top-center'/>
     </GlobalContextProvider>
-  </React.StrictMode>
+    </Provider>
 )

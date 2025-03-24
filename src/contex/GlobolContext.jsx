@@ -8,13 +8,13 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 user: action.payload,
-                avatar: action.payload.avatar || state.avatar, // Avatarni ham saqlash
+                avatar: action.payload.avatar || state.avatar, 
             };
         case "LOGOUT":
             return {
                 ...state,
                 user: null,
-                avatar: null, // Avatarni ham o‘chirish
+                avatar: null, 
             };
         case "LIKE":
             return { ...state, likedImages: [...state.likedImages, action.payload] };

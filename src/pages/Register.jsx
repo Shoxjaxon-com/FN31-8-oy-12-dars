@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form } from 'react-router-dom';
-import FormInput from '../componets/FormInput';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 import { useRegister } from '../hook/useRegister';
@@ -10,24 +8,27 @@ function Register() {
   const { registerWithGoogle } = useRegister();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const register = (name, email, password) => {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    if (users.find(user => user.email === email)) {
+      return { success: false, message: 'Bu email allaqachon ro‘yxatdan o‘tgan!' };
+    }
+    
+    const newUser = { name, email, password };
+    localStorage.setItem('users', JSON.stringify([...users, newUser]));
+    return { success: true };
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const { name, email, password, confirmPassword } = formData;
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
+    if (!name || !email || !password || !confirmPassword) {
       setError('Barcha maydonlarni to‘ldiring!');
       return;
     }
@@ -37,69 +38,40 @@ function Register() {
       return;
     }
 
+    const result = register(name, email, password);
+    if (!result.success) {
+      setError(result.message);
+      return;
+    }
+
     setError('');
-    navigate('/login'); // Login sahifasiga yo‘naltirish
+    navigate('/login');
   };
 
   return (
     <div className="flex min-h-screen w-full flex-col md:flex-row">
       <div className="hidden md:w-[40%] bg-[url('https://picsum.photos/seed/picsum/600/800')] bg-cover bg-center md:block"></div>
-
-      <div className="flex w-full items-center justify-center bg-[url('https://picsum.photos/seed/picsum/600/800')] bg-cover bg-center md:w-[60%] md:bg-none rounded-md">
-        <Form method="post" className="w-full max-w-md" onSubmit={handleSubmit}>
+      <div className="flex w-full items-center justify-center md:w-[60%] md:bg-none rounded-md">
+        <form className="w-full max-w-md" onSubmit={handleSubmit}>
           <h1 className="text-2xl md:text-4xl font-bold mb-5 text-center">Register Page</h1>
-          
           <div className="flex flex-col gap-4">
-            <FormInput 
-              placeholder="Full Name" 
-              name="name" 
-              type="text" 
-              value={formData.name} 
-              onChange={handleChange}
-            />
-            <FormInput 
-              placeholder="Email" 
-              name="email" 
-              type="email" 
-              value={formData.email} 
-              onChange={handleChange}
-            />
-            <FormInput 
-              placeholder="Password" 
-              name="password" 
-              type="password" 
-              value={formData.password} 
-              onChange={handleChange}
-            />
-            <FormInput 
-              placeholder="Confirm Password" 
-              name="confirmPassword" 
-              type="password" 
-              value={formData.confirmPassword} 
-              onChange={handleChange}
-            />
+            <input placeholder="Full Name" type="text" value={name} onChange={(e) => setName(e.target.value)} className="input input-bordered" />
+            <input placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input input-bordered" />
+            <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input input-bordered" />
+            <input placeholder="Confirm Password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="input input-bordered" />
           </div>
-
           {error && <p className="text-red-500 text-center mt-2">{error}</p>}
-
           <div className="my-5 flex flex-col gap-3 md:my-10 md:flex-row md:gap-5">
-            <button type="submit" className="grow btn btn-primary btn-sm md:btn-md">
-              Register
-            </button>
-            <button
-              onClick={registerWithGoogle}
-              type="button"
-              className="grow btn btn-secondary btn-sm md:btn-md flex items-center gap-2 justify-center"
-            >
+            <button type="submit" className="grow btn btn-primary btn-sm md:btn-md">Register</button>
+            <button onClick={registerWithGoogle} type="button" className="grow btn btn-secondary btn-sm md:btn-md flex items-center gap-2 justify-center">
               <FcGoogle className="w-6 h-6" />
               <span>Google</span>
             </button>
           </div>
-          
           <div className='text-center'>
             <Link to='/login' className='link-primary'>You already have an account!</Link>
           </div>
-        </Form>
+        </form>
       </div>
     </div>
   );

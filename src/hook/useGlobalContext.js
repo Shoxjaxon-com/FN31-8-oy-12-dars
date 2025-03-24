@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GlobalContext } from "../contex/GlobolContext"; // ✅ To‘g‘ri fayl nomi
+import { GlobalContext } from "../contex/GlobolContext"; 
 
 export const useGlobalContext = () => {
   const context = useContext(GlobalContext);
