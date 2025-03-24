@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { FcGoogle } from 'react-icons/fc';
 import { useRegister } from '../hook/useRegister';
 import { login } from '../store/authSlice';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Ko‘z ikonalari
 
 function Login() {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [forgotEmail, setForgotEmail] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Parolni ko‘rsatish holati
 
   // ✅ Login funksiyasi
   const handleSubmit = (event) => {
@@ -57,7 +59,7 @@ function Login() {
         <form className="w-full max-w-md" onSubmit={handleSubmit}>
           <h1 className="text-2xl md:text-4xl font-bold mb-5 text-center">Login Page</h1>
           {error && <p className="text-red-500 text-center">{error}</p>}
-          
+
           {/* ✅ Inputlar */}
           <div className="flex flex-col gap-4">
             <input
@@ -65,17 +67,25 @@ function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="input input-bordered"
+              className="input input-bordered w-full" // Umumiy kenglik qo'shildi
               required
             />
-            <input
-              placeholder="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input input-bordered"
-              required
-            />
+            <div className="relative">
+              <input
+                placeholder="Password"
+                type={showPassword ? "text" : "password"} // Agar ko‘z bosilgan bo‘lsa, parolni ko‘rsat
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input input-bordered w-full" // Umumiy kenglik qo'shildi
+                required
+              />
+              <div
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)} // Ko‘z ikonasi
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
           </div>
 
           <div className="my-5 flex flex-col gap-3 md:my-10 md:flex-row md:gap-5">

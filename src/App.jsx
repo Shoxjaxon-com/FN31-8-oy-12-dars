@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Home from './pages/Home';
+import Home, { action as HomeAction } from './pages/Home'; // Home komponentini va action ni import qilish
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
@@ -28,6 +28,7 @@ const router = createBrowserRouter([
         {withContainer(Home)}
       </ProtectedRoute>
     ),
+    action: HomeAction, // HomeAction import qilingan joyda ishlatish
   },
   {
     path: '/about',

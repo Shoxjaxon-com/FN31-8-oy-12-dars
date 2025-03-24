@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 import { useRegister } from '../hook/useRegister';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Ko‘z ikonalari
 
 function Register() {
   const { registerWithGoogle } = useRegister();
@@ -13,6 +14,8 @@ function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Parolni ko‘rsatish holati
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Tasdiqlash parolni ko‘rsatish holati
 
   const register = (name, email, password) => {
     const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -55,10 +58,54 @@ function Register() {
         <form className="w-full max-w-md" onSubmit={handleSubmit}>
           <h1 className="text-2xl md:text-4xl font-bold mb-5 text-center">Register Page</h1>
           <div className="flex flex-col gap-4">
-            <input placeholder="Full Name" type="text" value={name} onChange={(e) => setName(e.target.value)} className="input input-bordered" />
-            <input placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input input-bordered" />
-            <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input input-bordered" />
-            <input placeholder="Confirm Password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="input input-bordered" />
+            <input
+              placeholder="Full Name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="input input-bordered w-full" // Umumiy kenglik qo'shildi
+              required
+            />
+            <input
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input input-bordered w-full" // Umumiy kenglik qo'shildi
+              required
+            />
+            <div className="relative">
+              <input
+                placeholder="Password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input input-bordered w-full" // Umumiy kenglik qo'shildi
+                required
+              />
+              <div
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)} // Ko‘z ikonasi
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                placeholder="Confirm Password"
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="input input-bordered w-full" // Umumiy kenglik qo'shildi
+                required
+              />
+              <div
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)} // Ko‘z ikonasi
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
           </div>
           {error && <p className="text-red-500 text-center mt-2">{error}</p>}
           <div className="my-5 flex flex-col gap-3 md:my-10 md:flex-row md:gap-5">
