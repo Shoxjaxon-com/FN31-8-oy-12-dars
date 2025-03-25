@@ -10,8 +10,6 @@ import LikedImages from './pages/LikkedImages';
 import DowloadImg from './pages/DowloadImg';
 import ImgInfo from './pages/ImgInfo';
 import ProtectedRoute from './componets/ProtectedRoute';
-import Navbar from './componets/Navbar';
-
 const withContainer = (Component) => (
   <MainLeyauts>
     <div className="container mx-auto">

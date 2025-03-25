@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
-        navigate("/login"); // 🛑 Agar foydalanuvchi login qilmagan bo‘lsa, login sahifasiga yo‘naltiramiz
+        navigate("/login"); 
       } else {
         setUser(currentUser);
       }
